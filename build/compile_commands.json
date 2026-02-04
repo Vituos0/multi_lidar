@@ -1,0 +1,20 @@
+[
+{
+  "directory": "D:/Programing/Cmake/Project/EdgeLidar/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\18\\BUILDT~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -ID:\\Programing\\Cmake\\Project\\EdgeLidar -ID:\\Programing\\Cmake\\Project\\EdgeLidar\\lidar -ID:\\Programing\\Cmake\\Project\\EdgeLidar\\lidar\\common /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd /FoCMakeFiles\\EdgeLidar.dir\\main.cpp.obj /FdCMakeFiles\\EdgeLidar.dir\\ /FS -c D:\\Programing\\Cmake\\Project\\EdgeLidar\\main.cpp",
+  "file": "D:/Programing/Cmake/Project/EdgeLidar/main.cpp",
+  "output": "D:/Programing/Cmake/Project/EdgeLidar/build/CMakeFiles/EdgeLidar.dir/main.cpp.obj"
+},
+{
+  "directory": "D:/Programing/Cmake/Project/EdgeLidar/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\18\\BUILDT~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -ID:\\Programing\\Cmake\\Project\\EdgeLidar -ID:\\Programing\\Cmake\\Project\\EdgeLidar\\lidar -ID:\\Programing\\Cmake\\Project\\EdgeLidar\\lidar\\common /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd /FoCMakeFiles\\EdgeLidar.dir\\lidar\\PavoParser.cpp.obj /FdCMakeFiles\\EdgeLidar.dir\\ /FS -c D:\\Programing\\Cmake\\Project\\EdgeLidar\\lidar\\PavoParser.cpp",
+  "file": "D:/Programing/Cmake/Project/EdgeLidar/lidar/PavoParser.cpp",
+  "output": "D:/Programing/Cmake/Project/EdgeLidar/build/CMakeFiles/EdgeLidar.dir/lidar/PavoParser.cpp.obj"
+},
+{
+  "directory": "D:/Programing/Cmake/Project/EdgeLidar/build",
+  "command": "C:\\PROGRA~2\\MICROS~2\\18\\BUILDT~1\\VC\\Tools\\MSVC\\1450~1.357\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -ID:\\Programing\\Cmake\\Project\\EdgeLidar -ID:\\Programing\\Cmake\\Project\\EdgeLidar\\lidar -ID:\\Programing\\Cmake\\Project\\EdgeLidar\\lidar\\common /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -std:c++17 -MDd /FoCMakeFiles\\EdgeLidar.dir\\lidar\\UdpReceiver.cpp.obj /FdCMakeFiles\\EdgeLidar.dir\\ /FS -c D:\\Programing\\Cmake\\Project\\EdgeLidar\\lidar\\UdpReceiver.cpp",
+  "file": "D:/Programing/Cmake/Project/EdgeLidar/lidar/UdpReceiver.cpp",
+  "output": "D:/Programing/Cmake/Project/EdgeLidar/build/CMakeFiles/EdgeLidar.dir/lidar/UdpReceiver.cpp.obj"
+}
+]
