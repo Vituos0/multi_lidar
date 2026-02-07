@@ -90,6 +90,7 @@ bool UdpReceiver::start() {
     WSAStartup(MAKEWORD(2,2), &wsa);
 
     sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+
     if (sockfd < 0) return false;
 
     sockaddr_in addr{};

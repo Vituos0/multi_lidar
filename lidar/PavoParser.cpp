@@ -8,8 +8,11 @@ bool PavoParser::parse(const uint8_t* data,
                        size_t len,
                        std::vector<LidarPoint>& outPoints)
 {
-    if (len != PACKET_SIZE)
-        return false;
+    // if (len != PACKET_SIZE)
+    //     return false;
+        if (len < 120 || len > 150)
+            return false; // vá parser
+
 
     outPoints.clear();
     outPoints.reserve(GROUP_COUNT * 2);
@@ -17,32 +20,35 @@ bool PavoParser::parse(const uint8_t* data,
     for (int g = 0; g < GROUP_COUNT; ++g)
     {
         int offset = g * GROUP_SIZE;
-        const PavoGroup* grp =
-            reinterpret_cast<const PavoGroup*>(data + offset);
+        // const PavoGroup* grp =
+        //     reinterpret_cast<const PavoGroup*>(data + offset);
+        PavoGroup grp;
+           memcpy(&grp, data + offset, sizeof(PavoGroup));
+
 
         // Validate ID
-        if (grp->id != 0xFF01 && grp->id != 0x01FF)
+        if (grp.id != 0xFF01 && grp.id != 0x01FF)
             continue;
 
-        float baseAngle = grp->angle * ANGLE_SCALE;
+        float baseAngle = grp.angle * ANGLE_SCALE;
 
         // Point 1
-        if (grp->dist1 > 0)
+        if (grp.dist1 > 0)
         {
             outPoints.push_back({
                 baseAngle,
-                grp->dist1 * DIST_SCALE,
-                grp->inten1
+                grp.dist1 * DIST_SCALE,
+                grp.inten1
             });
         }
 
         // Point 2
-        if (grp->dist2 > 0)
+        if (grp.dist2 > 0)
         {
             outPoints.push_back({
                 baseAngle + ANGLE_STEP,
-                grp->dist2 * DIST_SCALE,
-                grp->inten2
+                grp.dist2 * DIST_SCALE,
+                grp.inten2
             });
         }
     }

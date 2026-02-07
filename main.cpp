@@ -73,7 +73,6 @@
 // } debug log packet
 
 #include <iostream>
-#include <unordered_map>
 #include <vector>
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -85,33 +84,34 @@
 constexpr int UDP_PORT = 2368;
 constexpr int BUFFER_SIZE = 2048;
 
-// ánh xạ IP → LiDAR ID
-std::unordered_map<std::string, int> lidarMap;
-int nextLidarId = 1;
+// IP cố định của từng LiDAR
+constexpr const char* LIDAR1_IP = "10.10.10.101";
+constexpr const char* LIDAR2_IP = "10.10.10.102";
 
 int getLidarIdFromIP(const sockaddr_in& addr)
 {
     char ipStr[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &addr.sin_addr, ipStr, sizeof(ipStr));
 
-    std::string ip(ipStr);
+    if (strcmp(ipStr, LIDAR1_IP) == 0) return 1;
+    if (strcmp(ipStr, LIDAR2_IP) == 0) return 2;
 
-    if (lidarMap.find(ip) == lidarMap.end())
-    {
-        lidarMap[ip] = nextLidarId++;
-        std::cout << "Detected LiDAR " << lidarMap[ip]
-                  << " at IP " << ip << std::endl;
-    }
-
-    return lidarMap[ip];
+    return -1; // unknown
 }
 
-void onUdpPacket(const uint8_t* data, size_t len, int lidarId)
+void onUdpPacket(const uint8_t* data, size_t len,
+                 int lidarId,
+                 const std::string& ip)
 {
     std::vector<LidarPoint> points;
 
     if (!PavoParser::parse(data, len, points))
+    {
+        std::cerr << "[DROP] LiDAR " << lidarId
+                  << " IP=" << ip
+                  << " len=" << len << std::endl;
         return;
+    }
 
     for (auto& p : points)
     {
@@ -123,34 +123,20 @@ void onUdpPacket(const uint8_t* data, size_t len, int lidarId)
     }
 }
 
+
 int main()
 {
     WSADATA wsa;
-    if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-    {
-        std::cerr << "WSAStartup failed\n";
-        return -1;
-    }
+    WSAStartup(MAKEWORD(2, 2), &wsa);
 
     SOCKET sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (sock == INVALID_SOCKET)
-    {
-        std::cerr << "Socket creation failed\n";
-        return -1;
-    }
 
     sockaddr_in localAddr{};
     localAddr.sin_family = AF_INET;
     localAddr.sin_port = htons(UDP_PORT);
     localAddr.sin_addr.s_addr = INADDR_ANY;
 
-    if (bind(sock, (sockaddr*)&localAddr, sizeof(localAddr)) == SOCKET_ERROR)
-    {
-        std::cerr << "Bind failed\n";
-        closesocket(sock);
-        WSACleanup();
-        return -1;
-    }
+    bind(sock, (sockaddr*)&localAddr, sizeof(localAddr));
 
     std::cout << "Listening UDP port " << UDP_PORT << "...\n";
 
@@ -174,14 +160,21 @@ int main()
             continue;
 
         int lidarId = getLidarIdFromIP(senderAddr);
+        if (lidarId < 0)
+            continue; // bỏ gói lạ
 
-        onUdpPacket(buffer, recvLen, lidarId);
+        char ipStr[INET_ADDRSTRLEN];
+        inet_ntop(AF_INET, &senderAddr.sin_addr, ipStr, sizeof(ipStr));
+
+        onUdpPacket(buffer, recvLen, lidarId, ipStr);
+
     }
 
     closesocket(sock);
     WSACleanup();
     return 0;
 }
+
 
 
 
